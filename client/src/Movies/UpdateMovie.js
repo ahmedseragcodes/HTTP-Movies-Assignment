@@ -13,12 +13,14 @@ const initialUpdatedMovieState= {
 
 const UpdateMovie = (props)=>{
 
-const [updatedMovie, setUpdatedMovie]=useState(initialUpdatedMovieState);
+const [movie, setUpdatedMovie]=useState(initialUpdatedMovieState);
 
 
 const history=useHistory();
 const params=useParams();
 
+
+//GETS MOVIE BEING EDITED RIGHT WHEN COMPONENT LOADS 
     useEffect(()=>{
         axios.get(`http://localhost:5000/api/movies/${params.id}`)
         .then((res)=>{
@@ -32,19 +34,23 @@ const params=useParams();
         })
     },[])
 
+//HANDLES CHANGES BEING MADE ON INPUT FORM TO UPDATE RESPECTIVE MOVIE
     const updateFormChangeHandler = (event) => {
         const {name, value}=event.target;
 
         setUpdatedMovie({
-            ...updatedMovie, [name]: value
+            ...movie, [name]: value
         })
     }
 
+//HANDLES SUBMISSION OF MOVIE UPDATES TO STATE AND TO SERVER 
     const onEditSubmit= (event) =>{
         event.preventDefault();
-        axios.post(`http://localhost:5000/api/movies/${params.id}`)
+        axios.put(`http://localhost:5000/api/movies/${params.id}`, movie)
         .then((res)=>{
             console.log("SUBMITTED EDITED MOVIE SUCCESS", res)
+            setUpdatedMovie(res.data);
+            history.push(`/movies/${params.id}`);
         })
         .catch((err)=>{
             console.log("FAILED TO SUBMIT EDITED MOVIE", err);
@@ -53,18 +59,18 @@ const params=useParams();
 
         return (
             <UpdateMovieContainer>
-                <form>
+                <form onSubmit={onEditSubmit} >
                     <label htmlFor="title">Enter A New Movie Title:
-                        <input type="text" name="title" id="title" value={updatedMovie.title} onChange={updateFormChangeHandler} placeholder="Enter A New Movie Title" />
+                        <input type="text" name="title" id="title" value={movie.title} onChange={updateFormChangeHandler} placeholder="Enter A New Movie Title" />
                     </label>
                     <label htmlFor="director">Enter A New Movie Director:
-                        <input type="text" name="director" id="director" value={updatedMovie.director} onChange={updateFormChangeHandler} placeholder="Enter A New Movie Director" />
+                        <input type="text" name="director" id="director" value={movie.director} onChange={updateFormChangeHandler} placeholder="Enter A New Movie Director" />
                     </label>
                     <label htmlFor="metascore">Enter A New Movie Score:
-                        <input type="number" name="metascore" id="metascore" value={updatedMovie.metascore} onChange={updateFormChangeHandler} placeholder="Enter A New Movie Score" />
+                        <input type="number" name="metascore" id="metascore" value={movie.metascore} onChange={updateFormChangeHandler} placeholder="Enter A New Movie Score" />
                     </label>
                     <label htmlFor="stars">Enter New Movie Stars:
-                        <input type="text" name="stars" id="stars" value={updatedMovie.stars} onChange={updateFormChangeHandler} placeholder="Enter New Movie Stars" />
+                        <input type="text" name="stars" id="stars" value={movie.stars} onChange={updateFormChangeHandler} placeholder="Enter New Movie Stars" />
                     </label>
                     <button>Submit</button>
                 </form>

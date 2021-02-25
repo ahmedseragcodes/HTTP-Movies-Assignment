@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
+import MovieList from "./MovieList";
 
 const initialUpdatedMovieState= {
             title: "",
@@ -50,6 +51,7 @@ const params=useParams();
         .then((res)=>{
             console.log("SUBMITTED EDITED MOVIE SUCCESS", res)
             setUpdatedMovie(res.data);
+            props.setMovieList([...props.movieList, res.data])
             history.push(`/movies/${params.id}`);
         })
         .catch((err)=>{

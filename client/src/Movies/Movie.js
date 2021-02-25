@@ -24,6 +24,8 @@ function Movie({ movieList, setMovieList, addToSavedList }) {
     history.push(`/update-movie/${params.id}`)
   }
 
+
+
   //HANDLES DELETE CLICK ON A SPECIFIC MOVIE
 
   const handleDelete=()=>{
@@ -32,7 +34,8 @@ function Movie({ movieList, setMovieList, addToSavedList }) {
       console.log("HANDLE DELETE SUCCEEDED", res)
       setMovieList(
         movieList.filter((movie)=>{
-          return movie.id !== params.id;
+          
+          return movie.id !== res.data;
         })
       )
       history.push("/")

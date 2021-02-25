@@ -20,7 +20,7 @@ function Movie({ addToSavedList }) {
   };
 
   const handleEditClick= () =>{
-    history.push(`http://localhost:5000/api/movies/${params.id}`)
+    history.push(`/update-movie/${params.id}`)
   }
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function Movie({ addToSavedList }) {
       <div className="save-button" onClick={saveMovie}>
         Save
       </div>
-      <button>Edit Movie</button>
+      <button onClick={handleEditClick}>Edit Movie</button>
       <button>Delete Movie</button>
     </div>
   );
